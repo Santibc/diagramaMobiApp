@@ -1,0 +1,22 @@
+@startuml DeploymentDiagram
+
+node "Public VPC" {
+  artifact "Load Balancer" as LB
+}
+
+node "Private VPC" {
+  node "Auto Scaling Group" {
+    component "API Gateway"                           as APIGW
+    component "Microservicios (Auth, Ride, Audit)"    as MS
+  }
+  database "UserDB\n(encrypted at rest)"              as UserDB
+  database "Logs S3\n(encrypted at rest)"             as Logs
+  node "HSM / KMS"                                    as KMS
+}
+
+LB  --> APIGW : HTTPS/TLS
+APIGW --> MS   : HTTP/TLS
+MS   --> UserDB: JDBC/TLS
+MS   --> Logs  : Write logs
+MS   --> KMS   : Key operations
+@enduml
