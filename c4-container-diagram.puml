@@ -1,0 +1,18 @@
+@startuml ContainerDiagram
+!include ./C4-PlantUML/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(university, "Universidad Regional", "Sistema de gestión de rutas internas")
+System_Boundary(mobiApp, "MobiApp") {
+  Container(apiGateway,       "API Gateway",         "REST API",           "Enruta solicitudes, aplica OAuth2")
+  Container(routingService,   "Routing Service",     "Node.js",            "Gestiona rutas óptimas")
+  Container(discountService,  "Discount Service",    "Node.js",            "Aplica descuentos para estudiantes")
+  Container(monitoring,       "Monitoring & SLA",    "Servicio",           "Recolecta métricas de disponibilidad")
+}
+
+Rel_D(university, apiGateway, "HTTPS / OAuth2",    "Consulta rutas y aplica descuentos")
+Rel(apiGateway, routingService,  "HTTP REST",      "Proxy a rutas")
+Rel(apiGateway, discountService, "HTTP REST",      "Proxy a descuentos")
+Rel(apiGateway, monitoring,      "Envía métricas", "SLA metrics")
+@enduml

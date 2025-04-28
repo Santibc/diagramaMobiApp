@@ -1,0 +1,14 @@
+@startuml ComponentDiagram
+!include ./C4-PlantUML/C4_Component.puml
+Container(routingServiceContainer, "Routing Service", "Node.js", "Gestiona rutas óptimas") {
+  Component(authService,      "Auth Service",                "Valida tokens OAuth2")
+  Component(routingAdapter,   "Routing Integration Adapter",  "Transforma datos al formato Univ.")
+  Component(discountEngine,   "Discount Engine",             "Calcula descuentos de estudiantes")
+  Component(slaMonitor,       "SLA Monitor",                 "Recolecta métricas de disponibilidad")
+}
+
+Rel_L(routingServiceContainer, authService,    "Usa")
+Rel_L(routingServiceContainer, routingAdapter, "Usa")
+Rel_L(routingServiceContainer, discountEngine, "Usa")
+Rel_L(routingServiceContainer, slaMonitor,     "Envía métricas")
+@enduml
